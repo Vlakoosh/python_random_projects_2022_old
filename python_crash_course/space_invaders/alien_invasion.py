@@ -2,6 +2,7 @@ import pygame
 import sys
 from settings import Settings
 from ship import Ship
+from bullet import Bullet
 
 class AlienInvasion:
     # main class used for managing the game resources and how the game works
@@ -16,15 +17,14 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
         
         self.ship = Ship(self)
+        self.bullets = pygame.sprite.Group()
         
     def run_game(self):
         # starting the main loop of the game
         while True:
-            #check for certain input events
             self._check_events()
-            #update the ship position
             self.ship.update()
-            #update the screen
+            self._update_bullets()
             self._update_screen()
             
             
@@ -53,6 +53,8 @@ class AlienInvasion:
             self.ship.moving_up = True
         elif event.key == pygame.K_q:
             sys.exit()
+        elif event.key == pygame.K_SPACE:
+            self._fire_bullet()
     
     def _check_keyup_events(self, event):
         if event.key == pygame.K_RIGHT:
@@ -71,11 +73,29 @@ class AlienInvasion:
     def _update_screen(self):
         #set background color of the screen
         self.screen.fill(self.settings.bg_color)
+        #put all of the bullets on the screen
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
         #render the ship on top of the background
         self.ship.blitme()
         #render the current screen and its elements
         pygame.display.flip()
-            
+    
+    def _fire_bullet(self):
+        #creating a new bullet and adding it to the list
+        if len(self.bullets) < self.settings.max_bullets:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
+        
+    
+    def _update_bullets(self):
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+
+        self.bullets.update()
+
+
 if __name__ == '__main__':
     ai = AlienInvasion()
     ai.run_game()
