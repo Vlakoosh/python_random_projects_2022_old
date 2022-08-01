@@ -18,10 +18,13 @@ class Ship:
         self.rect.midbottom = self.screen_rect.midbottom
         #float variable allowing for a more accurate value of ship's position if parts of a pixel are used
         self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
         
         #miscellaneous variables
         self.moving_right = False
         self.moving_left = False
+        self.moving_down = False
+        self.moving_up = False
         
         
     def blitme(self):
@@ -30,9 +33,14 @@ class Ship:
     
     def update(self):
         #updating the position of the ship based on the direction of movement
-        if self.moving_right:
+        if self.moving_right and self.rect.right < self.screen_rect.right:
             self.x += self.settings.ship_speed
-        if self.moving_left:
+        if self.moving_left and self.rect.left > 0:
             self.x -= self.settings.ship_speed
+        if self.moving_down and self.rect.bottom < self.screen_rect.bottom:
+            self.y += self.settings.ship_speed
+        if self.moving_up and self.rect.top > 0:
+            self.y -= self.settings.ship_speed
         
         self.rect.x = self.x
+        self.rect.y = self.y
