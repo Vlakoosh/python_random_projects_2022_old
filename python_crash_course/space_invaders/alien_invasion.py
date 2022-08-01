@@ -1,3 +1,4 @@
+from cmath import rect
 import pygame
 import sys
 from settings import Settings
@@ -19,6 +20,9 @@ class AlienInvasion:
         
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+        
+        self._create_fleet()
         
     def run_game(self):
         # starting the main loop of the game
@@ -74,11 +78,17 @@ class AlienInvasion:
     def _update_screen(self):
         #set background color of the screen
         self.screen.fill(self.settings.bg_color)
+        
+        #draw aliens on the screen
+        self.aliens.draw(self.screen)
+        
         #put all of the bullets on the screen
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+            
         #render the ship on top of the background
         self.ship.blitme()
+        
         #render the current screen and its elements
         pygame.display.flip()
     
@@ -95,7 +105,37 @@ class AlienInvasion:
                 self.bullets.remove(bullet)
 
         self.bullets.update()
-
+    
+    def _create_fleet(self):
+        #Creating an alien
+        alien = Alien(self)
+        
+        #Checking for the number of aliens in a row
+        alien_width = alien.rect.width
+        
+        available_space_x = self.settings.screen_width - (2 * alien_width)
+        number_of_aliens_x = available_space_x // (2 * alien_width)
+        
+        #checking for the number of rows of aliens
+        alien_height = alien.rect.height
+        ship_height = self.ship.rect.height
+        
+        available_space_y = self.settings.screen_height - (3 * alien_height) - ship_height
+        number_of_aliens_y = available_space_y // (2 * alien_height)
+        
+        #Creating the first row of aliens
+        for row_number in range(number_of_aliens_y):
+            for alien_number in range(number_of_aliens_x):
+                self._create_alien(alien_number, row_number)
+    
+    def _create_alien(self, alien_number, row_number):
+        #Creating an alien and putting it in a row
+        alien = Alien(self)
+        alien_width = alien.rect.width
+        alien.x = alien_width + 2 * alien_width * alien_number
+        alien.rect.x = alien.x
+        alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
+        self.aliens.add(alien)
 
 if __name__ == '__main__':
     ai = AlienInvasion()
