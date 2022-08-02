@@ -18,7 +18,7 @@ class Ship:
         self.rect.midbottom = self.screen_rect.midbottom
         #float variable allowing for a more accurate value of ship's position if parts of a pixel are used
         self.x = float(self.rect.x)
-        self.y = float(self.rect.y)
+        #self.y = float(self.rect.y)
         
         #miscellaneous variables
         self.moving_right = False
@@ -37,10 +37,15 @@ class Ship:
             self.x += self.settings.ship_speed
         if self.moving_left and self.rect.left > 0:
             self.x -= self.settings.ship_speed
-        if self.moving_down and self.rect.bottom < self.screen_rect.bottom:
-            self.y += self.settings.ship_speed
-        if self.moving_up and self.rect.top > 0:
-            self.y -= self.settings.ship_speed
+        #if self.moving_down and self.rect.bottom < self.screen_rect.bottom:
+        #    self.y += self.settings.ship_speed
+        #if self.moving_up and self.rect.top > 0:
+        #    self.y -= self.settings.ship_speed
         
         self.rect.x = self.x
-        self.rect.y = self.y
+        #self.rect.y = self.y
+    
+    def center_ship(self):
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x)
+        
