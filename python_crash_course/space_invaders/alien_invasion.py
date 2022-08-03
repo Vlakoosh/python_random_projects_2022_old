@@ -8,6 +8,7 @@ from bullet import Bullet
 from alien import Alien
 from game_stats import GameStats
 from button import Button
+from scoreboard import Scoreboard
 
 class AlienInvasion:
     # main class used for managing the game resources and how the game works
@@ -22,6 +23,7 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
         
         self.stats = GameStats(self)
+        self.sb = Scoreboard(self)
         
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
@@ -127,6 +129,9 @@ class AlienInvasion:
         #render the ship on top of the background
         self.ship.blitme()
         
+        #display the scoreboard
+        self.sb.show_score() 
+        
         #render the current screen and its elements
         pygame.display.flip()
     
@@ -146,7 +151,12 @@ class AlienInvasion:
     
     def _check_bullet_alien_collision(self):
         #dictionary of collisions: list of bullets, list of aliens, Remove bullet on collision, Remove alien on collision
-        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, not self.settings.piercing_bullets, True)
+        
+        if collisions:
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
+            self.sb.prep_score()
         
         if not self.aliens:
             #removing existing bullets and creating a new fleet
@@ -244,8 +254,8 @@ class AlienInvasion:
         self.stats.reset_stats()
 
         self.settings.initialize_dynamic_settings()
+        self.sb.prep_score()
         
-        time.sleep(0.5)
     
 if __name__ == '__main__':
     ai = AlienInvasion()
