@@ -157,12 +157,15 @@ class AlienInvasion:
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
             self.sb.prep_score()
+            
         
         if not self.aliens:
             #removing existing bullets and creating a new fleet
             self.bullets.empty()
             self._create_fleet()
             self.settings.increase_speed()
+            self.stats.level += 1
+            self.sb.prep_level()
     
     def _create_fleet(self):
         #Creating an alien
@@ -255,6 +258,7 @@ class AlienInvasion:
 
         self.settings.initialize_dynamic_settings()
         self.sb.prep_score()
+        self.sb.prep_level()
         
     
 if __name__ == '__main__':
