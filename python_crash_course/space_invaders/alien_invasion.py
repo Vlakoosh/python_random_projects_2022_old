@@ -132,6 +132,8 @@ class AlienInvasion:
         #display the scoreboard
         self.sb.show_score() 
         
+        self._display_lives()
+        
         #render the current screen and its elements
         pygame.display.flip()
     
@@ -210,6 +212,14 @@ class AlienInvasion:
         #Checking if an alien reached the bottom of the screen
         self._check_aliens_bottom()
     
+    def _display_lives(self):
+        ship_width = self.ship.rect.width
+        for ship_number in range(self.stats.ships_left):
+            ship = Ship(self)
+            ship.rect.x = 10 + ship_width * ship_number
+            ship.rect.y = 10
+            ship.blitme()
+            
     def _check_fleet_edges(self):
         for alien in self.aliens.sprites():
             if alien.check_edges():
