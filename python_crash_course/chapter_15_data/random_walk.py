@@ -2,23 +2,25 @@ from random import choice
 
 class RandomWalk():
     #Class created to generate random walking
-    def __init__(self, num_points=5000):
+    def __init__(self, num_points = 5000000):
         #Initialing random walking atributes
         self.num_points = num_points
         
         #Starting point has a value (0,0)
         self.x_values = [0]
         self.y_values = [0]
+        
+        self.distance = 50
     
     def fill_walk(self):
         while len(self.x_values) < (self.num_points):
             
             x_direction = choice([1, -1])
-            x_distance = choice(range(0,10))
+            x_distance = choice(range(0,self.distance))
             x_step = x_direction * x_distance
             
             y_direction = choice([1, -1])
-            y_distance = choice(range(0,10))
+            y_distance = choice(range(0,self.distance))
             y_step = y_direction * y_distance
             
             if x_step == 0 and y_step == 0:
