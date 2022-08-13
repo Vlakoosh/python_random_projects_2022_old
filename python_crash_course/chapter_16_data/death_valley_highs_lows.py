@@ -1,7 +1,7 @@
 import csv
 from datetime import datetime
 import matplotlib.pyplot as plt
-#streak
+
 file_start = 'python_crash_course/chapter_16_data/'
 filename = file_start + 'data/death_valley_2018_simple.csv'
 
