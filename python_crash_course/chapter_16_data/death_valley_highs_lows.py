@@ -14,6 +14,8 @@ with open(filename) as f:
     
     for row in reader:
         current_date = datetime.strptime(row[2], "%Y-%m-%d")
+
+        #check if there is data in the row
         try:
             high = int(row[4])
             low = int(row[5])
